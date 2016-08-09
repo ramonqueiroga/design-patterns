@@ -1,4 +1,4 @@
-package br.com.designpatterns;
+package br.com.designpatterns.strategy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
