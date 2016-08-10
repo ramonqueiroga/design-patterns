@@ -12,9 +12,10 @@ import java.util.Set;
 public class ImpostoFactory {
 
     private static Map<ImpostoEnum, Imposto> factory = new HashMap<>();
+    private static final String PACKAGE = "br.com.designpatterns";
 
     static {
-        Reflections reflections = new Reflections("br.com.designpatterns");
+        Reflections reflections = new Reflections(PACKAGE);
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(ImpostoImpl.class);
         for (Class<?> aClass : typesAnnotatedWith) {
             ImpostoEnum impostoEnum = aClass.getAnnotation(ImpostoImpl.class).tipoImposto();
