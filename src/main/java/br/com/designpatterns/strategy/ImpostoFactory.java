@@ -12,7 +12,7 @@ import java.util.Set;
 public class ImpostoFactory {
 
     private static Map<ImpostoEnum, Imposto> factory = new HashMap<>();
-    private static final String PACKAGE = "br.com.designpatterns";
+    private static final String PACKAGE = "br.com.designpatterns.strategy";
 
     static {
         Reflections reflections = new Reflections(PACKAGE);

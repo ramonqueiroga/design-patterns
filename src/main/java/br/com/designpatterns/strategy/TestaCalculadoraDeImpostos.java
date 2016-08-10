@@ -11,8 +11,10 @@ public class TestaCalculadoraDeImpostos {
     public static void main(String[] args) {
         Orcamento orcamento = new Orcamento(100.00);
         CalculadorDeImpostosStrategy calculadorDeImpostosStrategy = new CalculadorDeImpostosStrategy();
-        BigDecimal impostoCalculado = calculadorDeImpostosStrategy.calculaImposto(orcamento, ImpostoFactory.getImposto(ImpostoEnum.ICMS));
-        System.out.println(impostoCalculado);
+        BigDecimal icmsCalculado = calculadorDeImpostosStrategy.calculaImposto(orcamento, ImpostoFactory.getImposto(ImpostoEnum.ICMS));
+        BigDecimal issCalculado = calculadorDeImpostosStrategy.calculaImposto(orcamento, ImpostoFactory.getImposto(ImpostoEnum.ISS));
+        System.out.println(issCalculado);
+        System.out.println(icmsCalculado);
     }
 
 }
