@@ -1,5 +1,7 @@
 package br.com.designpatterns.strategy;
 
+import br.com.designpatterns.dominio.Orcamento;
+
 import java.math.BigDecimal;
 
 /**
