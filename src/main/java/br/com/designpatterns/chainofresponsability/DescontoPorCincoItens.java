@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * Created by ramon on 18/08/16.
  */
-@PrioridadeDesconto(value = "1")
+@PrioridadeDesconto(value = "2")
 public class DescontoPorCincoItens implements Desconto {
 
     private Desconto proximaOpcaoDesconto;

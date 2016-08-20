@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * Created by ramon on 18/08/16.
  */
-@PrioridadeDesconto(value = "3")
+@PrioridadeDesconto(value = "4")
 public class SemDesconto implements Desconto {
     @Override
     public BigDecimal calcula(Orcamento orcamento) {
