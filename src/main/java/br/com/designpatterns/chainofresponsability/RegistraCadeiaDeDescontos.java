@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class RegistraCadeiaDeDescontos {
 
-    private static Desconto descontoPrincipal;
+    private static Desconto desconto;
 
     static {
         Reflections reflections = new Reflections("br.com.designpatterns.chainofresponsability");
@@ -37,26 +37,19 @@ public class RegistraCadeiaDeDescontos {
                 e.printStackTrace();
             }
         }
-        descontoPrincipal = (Desconto) descontoPrincipal;
+        desconto = (Desconto) descontoPrincipal;
     }
 
     private static void invocaMetodoProximaOpcaoDesconto(Object nextInstance, Object currentInstance, Boolean invocaProximoDesconto)
             throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
-        Field field = currentInstance.getClass().getDeclaredField("proximaOpcaoDesconto");
-        field.setAccessible(true);
-        Class<?> aClass;
-        if(field.get(currentInstance) != null) {
-            aClass = field.get(currentInstance).getClass();
-        }
         Method declaredMethod = currentInstance.getClass().getDeclaredMethod("proximaOpcaoDesconto", Desconto.class);
         if (invocaProximoDesconto) {
             declaredMethod.invoke(currentInstance, nextInstance);
         }
-        field.setAccessible(false);
     }
 
     public static Desconto getCadeiaDeDescontos() {
-        return descontoPrincipal;
+        return desconto;
     }
 
 }

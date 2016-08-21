@@ -31,7 +31,6 @@ public class CalculadoraDeDescontosTest {
     }
 
     @Test
-    @Ignore
     public void testaCalculadoraDeDescontosComMaisDeQuinhentosReais() {
         CalculadoraDeDescontos calculadoraDeDescontos = new CalculadoraDeDescontos();
         Orcamento orcamento = new Orcamento(750.00);
