@@ -2,11 +2,11 @@ package br.com.designpatterns.chainofresponsability;
 
 import org.reflections.Reflections;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -20,25 +20,39 @@ public class RegistraCadeiaDeDescontos {
         Reflections reflections = new Reflections("br.com.designpatterns.chainofresponsability");
         List<Class<?>> classList = reflections.getTypesAnnotatedWith(PrioridadeDesconto.class).stream().collect(Collectors.toList());
         classList.sort((c1, c2) -> c1.getAnnotation(PrioridadeDesconto.class).value().compareTo(c2.getAnnotation(PrioridadeDesconto.class).value()));
-        Map<Integer, Object> objects = new HashMap<>();
+        Object descontoPrincipal = null;
+        Object cadeiaDeDescontos = null;
         for (int i = 0; i < classList.size(); i++) {
             boolean invocaProximoDesconto = i + 1 <= classList.size()-1;
             try {
-                objects.put(i, classList.get(i).newInstance());
-                invocaMetodoProximaOpcaoDesconto((invocaProximoDesconto ? classList.get(i + 1) : null), classList.get(i), objects.get(i), invocaProximoDesconto);
-            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+                if(cadeiaDeDescontos == null) {
+                    cadeiaDeDescontos = classList.get(i).newInstance();
+                    descontoPrincipal = cadeiaDeDescontos;
+                }
+
+                Object o = (invocaProximoDesconto ? classList.get(i + 1).newInstance() : null);
+                invocaMetodoProximaOpcaoDesconto(o, cadeiaDeDescontos, invocaProximoDesconto);
+                cadeiaDeDescontos = o;
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
-        descontoPrincipal = (Desconto) objects.get(0);
+        descontoPrincipal = (Desconto) descontoPrincipal;
     }
 
-    private static void invocaMetodoProximaOpcaoDesconto(Class<?> nextInstance, Class<?> currentClass, Object currentInstance, Boolean invocaProximoDesconto)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
-        Method declaredMethod = currentClass.getDeclaredMethod("proximaOpcaoDesconto", Desconto.class);
-        if (invocaProximoDesconto) {
-            declaredMethod.invoke(currentInstance, nextInstance.newInstance());
+    private static void invocaMetodoProximaOpcaoDesconto(Object nextInstance, Object currentInstance, Boolean invocaProximoDesconto)
+            throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, NoSuchFieldException {
+        Field field = currentInstance.getClass().getDeclaredField("proximaOpcaoDesconto");
+        field.setAccessible(true);
+        Class<?> aClass;
+        if(field.get(currentInstance) != null) {
+            aClass = field.get(currentInstance).getClass();
         }
+        Method declaredMethod = currentInstance.getClass().getDeclaredMethod("proximaOpcaoDesconto", Desconto.class);
+        if (invocaProximoDesconto) {
+            declaredMethod.invoke(currentInstance, nextInstance);
+        }
+        field.setAccessible(false);
     }
 
     public static Desconto getCadeiaDeDescontos() {

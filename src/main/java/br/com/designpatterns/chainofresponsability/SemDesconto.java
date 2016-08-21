@@ -9,6 +9,9 @@ import java.math.BigDecimal;
  */
 @PrioridadeDesconto(value = "4")
 public class SemDesconto implements Desconto {
+
+    private Desconto proximaOpcaoDesconto;
+
     @Override
     public BigDecimal calcula(Orcamento orcamento) {
         return BigDecimal.ZERO;
@@ -17,5 +20,6 @@ public class SemDesconto implements Desconto {
     @Override
     public void proximaOpcaoDesconto(Desconto desconto) {
         /** NÃO INFORMA NINGUÉM */
+        this.proximaOpcaoDesconto = null;
     }
 }
